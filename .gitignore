@@ -1,0 +1,8 @@
+*.gem
+.bundle
+Gemfile.lock
+pkg/*
+.idea
+spec/dump.rdb
+redis-server.log
+redis.pid
