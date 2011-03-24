@@ -4,41 +4,41 @@ Authored against Resque 1.15, so it at least works with that - try running the t
 
 Usage:
 
-Start your workers with a QUEUE that can contain '*' for zero-or more of any character, '!' to exclude the following pattern, or @key to look up the patterns from redis.  Some examples help:
+Start your workers with a QUEUE that can contain '\*' for zero-or more of any character, '!' to exclude the following pattern, or @key to look up the patterns from redis.  Some examples help:
 
 QUEUE=foo rake resque:work
 
   Pulls jobs from the queue 'foo'
 
-QUEUE=* rake resque:work
+QUEUE=\* rake resque:work
 
   Pulls jobs from any queue
 
-QUEUE=*foo rake resque:work
+QUEUE=\*foo rake resque:work
 
   Pulls jobs from queues that end in foo
 
-QUEUE=*foo* rake resque:work
+QUEUE=\*foo\* rake resque:work
 
   Pulls jobs from queues whose names contain foo
 
-QUEUE=*foo*,!foobar rake resque:work
+QUEUE=\*foo\*,!foobar rake resque:work
 
   Pulls jobs from queues whose names contain foo except the foobar queue
 
-QUEUE=*foo*,!*bar rake resque:work
+QUEUE=\*foo\*,!\*bar rake resque:work
 
   Pulls jobs from queues whose names contain foo except queues whose names end in bar
 
 QUEUE=@key rake resque:work
 
-  Pulls jobs from queue names stored in redis (use Resque.set_dynamic_queue("key", ["queue_name1", "queue_name2"]) to set them)
+  Pulls jobs from queue names stored in redis (use Resque.set\_dynamic\_queue("key", ["queuename1", "queuename2"]) to set them)
 
 QUEUE=@ rake resque:work
 
   Pulls jobs from queue names stored in redis using the hostname of the worker
 
-Resque.set_dynamic_queue("key", ["*foo*", "!*bar"])
+Resque.set\_dynamic\_queue("key", ["\*foo\*", "!\*bar"])
 
 QUEUE=@key rake resque:work
 
