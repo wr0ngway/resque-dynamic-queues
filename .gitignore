@@ -4,5 +4,5 @@ Gemfile.lock
 pkg/*
 .idea
 spec/dump.rdb
-redis-server.log
-redis.pid
+spec/redis-server.log
+spec/redis.pid
