@@ -15,6 +15,10 @@ module Resque
           end
         end
 
+        def get_dynamic_queues
+          (redis.keys("dynamic_queue:*") || []).collect{|q| q.gsub('dynamic_queue:', '')}
+        end
+
       end
     end
   end
