@@ -52,7 +52,7 @@ describe "Dynamic Queues" do
     it "should pass lint" do
       Resque::Plugin.lint(Resque::Plugins::DynamicQueues)
     end
-    
+
   end
 
   context "basic queue patterns" do
@@ -80,7 +80,7 @@ describe "Dynamic Queues" do
     it "can include queues with pattern"do
       worker = Resque::Worker.new("high*")
       worker.queues.should == ["high_x", "high_y"]
-      
+
       worker = Resque::Worker.new("*high_z")
       worker.queues.should == ["superhigh_z"]
 
@@ -120,12 +120,34 @@ describe "Dynamic Queues" do
       Resque.watch_queue("foo")
       Resque.watch_queue("high_y")
       Resque.watch_queue("superhigh_z")
-      
+
       Resque.set_dynamic_queue("mykey", ["*high*", "!high_y"])
       worker = Resque::Worker.new("@mykey")
       worker.queues.should == ["high_x", "superhigh_z"]
     end
+
+    it "falls back to default queues when missing" do
+      Resque.set_dynamic_queue("default", ["foo", "bar"])
+      worker = Resque::Worker.new("@mykey")
+      worker.queues.should == ["bar", "foo"]
+    end
+
+    it "falls back to all queues when missing and no default" do
+      Resque.watch_queue("high_x")
+      Resque.watch_queue("foo")
+      worker = Resque::Worker.new("@mykey")
+      worker.queues.should == ["foo", "high_x"]
+    end
     
+    it "falls back to all queues when missing and no default and keep up to date" do
+      Resque.watch_queue("high_x")
+      Resque.watch_queue("foo")
+      worker = Resque::Worker.new("@mykey")
+      worker.queues.should == ["foo", "high_x"]
+      Resque.watch_queue("bar")
+      worker.queues.should == ["bar", "foo", "high_x"]
+    end
+
   end
 
 end
