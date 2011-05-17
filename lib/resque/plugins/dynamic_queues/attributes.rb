@@ -4,7 +4,7 @@ module Resque
       module Attributes
 
         def get_dynamic_queue(key)
-          redis.lrange("dynamic_queue:#{key}", 0, -1)
+          redis.lrange("dynamic_queue:#{key}", 0, -1) || redis.lrange("dynamic_queue:default", 0, -1) || Resque.queues
         end
 
         def set_dynamic_queue(key, values)
