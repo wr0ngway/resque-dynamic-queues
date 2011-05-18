@@ -1,4 +1,3 @@
-
 <h1>Dynamic Queues</h1>
 <table class='workers'>
   <tr>
@@ -8,7 +7,7 @@
     <th>Workers</th>
     <th></th>
   </tr>
-  <%- @queues.each do |queue| %>
+  <% @queues.each do |queue| %>
     <tr>
       <td><%= queue %></td>
       <td><%= Resque.get_dynamic_queue(queue).join(", ") %></td>
@@ -18,7 +17,7 @@
         <a href="<%= url(:dynamic_queues) %>/<%= queue %>/kill" class="kill">Remove</a>
       </td>
     </tr>
-  <%- end %>
+  <% end %>
   <tr>
     <td>Fallback</td>
     <td>-</td>

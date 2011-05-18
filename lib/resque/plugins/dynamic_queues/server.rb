@@ -15,7 +15,7 @@ module Resque
 
           app.post "/dynamic_queues" do
             key    = params['name']
-            values = params['queues'].split.collect{|q| q.gsub(/\s/, '')}
+            values = params['queues'].to_s.split.collect{|q| q.gsub(/\s/, '')}
             Resque.set_dynamic_queue(key, values)
             redirect url(:dynamic_queues)
           end
@@ -28,7 +28,7 @@ module Resque
 
           app.helpers do
             def dq_view(filename, options = {}, locals = {})
-              erb(File.read(File.join(::Resque::DynamicQueueServer::VIEW_PATH, "#{filename}.erb")), options, locals)
+              erb(File.read(File.join(::Resque::Plugins::DynamicQueues::Server::VIEW_PATH, "#{filename}.erb")), options, locals)
             end
           end
 
