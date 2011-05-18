@@ -1,14 +1,13 @@
-require 'resque-dynamic-queues'
+require 'resque_dynamic_queues'
 
 module Resque
-  module PLugins
+  module Plugins
     module DynamicQueues
       module Server
 
         VIEW_PATH = File.join(File.dirname(__FILE__), 'server', 'views')
 
         def self.registered(app)
-
           app.get "/dynamic_queues" do
             @queues = Resque.get_dynamic_queues
             dq_view :queues
@@ -40,4 +39,4 @@ module Resque
   end
 end
 
-Resque::Server.register Resque::PLugins::DynamicQueues::Server
+Resque::Server.register Resque::Plugins::DynamicQueues::Server
