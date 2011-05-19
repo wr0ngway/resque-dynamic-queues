@@ -24,7 +24,7 @@ describe "Dynamic Queues pages" do
   context "existnce in application" do
 
     it "should respond to it's url" do
-      get "/dynamic_queues"
+      get "/dynamicqueues"
       last_response.should be_ok
     end
 
@@ -41,7 +41,7 @@ describe "Dynamic Queues pages" do
       Resque.set_dynamic_queue("key_one", ["foo"])
       Resque.set_dynamic_queue("key_two", ["bar"])
 
-      get "/dynamic_queues"
+      get "/dynamicqueues"
 
       last_response.body.should include 'key_one'
       last_response.body.should include 'key_two'
@@ -51,7 +51,7 @@ describe "Dynamic Queues pages" do
       Resque.set_dynamic_queue("key_one", ["foo"])
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
 
-      get "/dynamic_queues"
+      get "/dynamicqueues"
 
       last_response.body.should include 'foo'
       last_response.body.should include 'bar, baz'
@@ -62,7 +62,7 @@ describe "Dynamic Queues pages" do
   context "form to edit queues" do
 
     it "should have form to edit queues" do
-      get "/dynamic_queues"
+      get "/dynamicqueues"
 
       last_response.body.should match /<form .*>/
       last_response.body.should match /<input .*name=['"]name['"].*>/
@@ -71,20 +71,20 @@ describe "Dynamic Queues pages" do
 
     it "should delete queues on empty queue submit" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
-      post "/dynamic_queues", {'name' => "key_two", "queues" => ""}
+      post "/dynamicqueues", {'name' => "key_two", "queues" => ""}
 
       Resque.get_dynamic_queue("key_two").should be_empty
     end
 
     it "should create queues" do
-      post "/dynamic_queues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
+      post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
 
       Resque.get_dynamic_queue("key_two").should == %w{foo bar baz}
     end
 
     it "should update queues" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
-      post "/dynamic_queues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
+      post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
 
       Resque.get_dynamic_queue("key_two").should == %w{foo bar baz}
     end
