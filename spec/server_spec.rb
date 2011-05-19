@@ -57,6 +57,14 @@ describe "Dynamic Queues pages" do
       last_response.body.should include 'bar, baz'
     end
 
+    it "should shows kill link for queue" do
+      Resque.set_dynamic_queue("key_one", ["foo"])
+
+      get "/dynamicqueues"
+
+      last_response.body.should match /<a .*href=['"]http:\/\/example.org\/dynamicqueues\/key_one\/kill['"].*>/
+    end
+
   end
 
   context "form to edit queues" do
@@ -64,7 +72,7 @@ describe "Dynamic Queues pages" do
     it "should have form to edit queues" do
       get "/dynamicqueues"
 
-      last_response.body.should match /<form .*>/
+      last_response.body.should match /<form .*action=['"]http:\/\/example.org\/dynamicqueues['"].*>/
       last_response.body.should match /<input .*name=['"]name['"].*>/
       last_response.body.should match /<textarea .*name=['"]queues['"].*>/
     end

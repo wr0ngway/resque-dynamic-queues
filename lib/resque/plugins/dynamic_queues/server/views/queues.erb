@@ -14,7 +14,7 @@
       <td><%= Resque::Worker.new("@#{queue}").queues.join(", ") %></td>
       <td></td>
       <td>
-        <a href="<%= url(:dynamic_queues) %>/<%= queue %>/kill" class="kill">Remove</a>
+        <a href="<%= url(:dynamicqueues) %>/<%= queue %>/kill" class="kill">Remove</a>
       </td>
     </tr>
   <% end %>
@@ -30,7 +30,7 @@
 
 
 <h1>Make a new queue</h1>
-<form action="<%= url(:dynamic_queues) %>" method="post" accept-charset="utf-8">
+<form action="<%= url(:dynamicqueues) %>" method="post" accept-charset="utf-8">
   <p><input type="text" name="name"></p>
   <p>
     <textarea name="queues"></textarea>
