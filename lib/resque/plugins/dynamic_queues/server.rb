@@ -20,7 +20,7 @@ module Resque
             redirect url(:dynamicqueues)
           end
 
-          app.post "/dynamicqueues/:key/kill" do
+          app.post "/dynamicqueues/:key/remove" do
             key    = params['key']
             Resque.set_dynamic_queue(key, [])
             redirect url(:dynamicqueues)

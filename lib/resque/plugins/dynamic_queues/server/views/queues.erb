@@ -14,7 +14,7 @@
       <td><%= Resque::Worker.new("@#{queue}").queues.join(", ") %></td>
       <td></td>
       <td>
-        <a href="<%= url(:dynamicqueues) %>/<%= queue %>/kill" class="kill">Remove</a>
+        <a href="<%= url(:dynamicqueues) %>/<%= queue %>/remove" class="remove">Remove</a>
       </td>
     </tr>
   <% end %>
@@ -43,7 +43,7 @@
 <script type="text/javascript" charset="utf-8">
   jQuery(function($) {
 
-    $('a.kill').click(function(e) {
+    $('a.remove').click(function(e) {
       e.preventDefault();
       var $link = $(this),
           url = $link.attr('href'),

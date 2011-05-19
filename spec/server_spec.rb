@@ -57,12 +57,27 @@ describe "Dynamic Queues pages" do
       last_response.body.should include 'bar, baz'
     end
 
-    it "should shows kill link for queue" do
+  end
+
+  context "remove queue link" do
+
+
+    it "should shows remove link for queue" do
       Resque.set_dynamic_queue("key_one", ["foo"])
 
       get "/dynamicqueues"
 
-      last_response.body.should match /<a .*href=['"]http:\/\/example.org\/dynamicqueues\/key_one\/kill['"].*>/
+      last_response.body.should match /<a .*href=['"]http:\/\/example.org\/dynamicqueues\/key_one\/remove['"].*>/
+    end
+
+    it "should remove queue when remove link clicked" do # JS will do the post
+      Resque.set_dynamic_queue("key_one", ["foo"])
+
+      post "/dynamicqueues/key_one/remove"
+
+      last_response.should be_redirect
+      last_response['Location'].should match /dynamicqueues/
+      Resque.get_dynamic_queue("key_two").should be_empty
     end
 
   end
