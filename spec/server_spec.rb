@@ -81,12 +81,16 @@ describe "Dynamic Queues pages" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
       post "/dynamicqueues", {'name' => "key_two", "queues" => ""}
 
+      last_response.should be_redirect
+      last_response['Location'].should match /dynamicqueues/
       Resque.get_dynamic_queue("key_two").should be_empty
     end
 
     it "should create queues" do
       post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
 
+      last_response.should be_redirect
+      last_response['Location'].should match /dynamicqueues/
       Resque.get_dynamic_queue("key_two").should == %w{foo bar baz}
     end
 
@@ -94,6 +98,8 @@ describe "Dynamic Queues pages" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
       post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
 
+      last_response.should be_redirect
+      last_response['Location'].should match /dynamicqueues/
       Resque.get_dynamic_queue("key_two").should == %w{foo bar baz}
     end
 

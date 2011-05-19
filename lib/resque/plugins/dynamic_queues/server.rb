@@ -17,13 +17,13 @@ module Resque
             key    = params['name']
             values = params['queues'].to_s.split.collect{|q| q.gsub(/\s/, '')}
             Resque.set_dynamic_queue(key, values)
-            redirect url(:dynamic_queues)
+            redirect url(:dynamicqueues)
           end
 
           app.post "/dynamicqueues/:key/kill" do
             key    = params['key']
             Resque.set_dynamic_queue(key, [])
-            redirect url(:dynamic_queues)
+            redirect url(:dynamicqueues)
           end
 
           app.helpers do
