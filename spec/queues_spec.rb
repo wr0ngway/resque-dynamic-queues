@@ -108,6 +108,16 @@ describe "Dynamic Queues" do
       worker.queues.should == ["bar", "foo"]
     end
 
+    it "will not bloat the workers queue" do
+      Resque.watch_queue("high_x")
+      worker = Resque::Worker.new("@mykey")
+
+      worker.send(:instance_eval, "@queues").should == ['@mykey']
+      worker.queues.should == ["high_x"]
+      worker.send(:instance_eval, "@queues").should == ['@mykey']
+      worker.queues.should == ["high_x"]
+    end
+
     it "uses hostname as default key in dynamic queues" do
       host = `hostname`.chomp
       Resque.set_dynamic_queue(host, ["foo", "bar"])
@@ -138,7 +148,7 @@ describe "Dynamic Queues" do
       worker = Resque::Worker.new("@mykey")
       worker.queues.should == ["foo", "high_x"]
     end
-    
+
     it "falls back to all queues when missing and no default and keep up to date" do
       Resque.watch_queue("high_x")
       Resque.watch_queue("foo")

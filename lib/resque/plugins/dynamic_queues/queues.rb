@@ -17,7 +17,7 @@ module Resque
         # list for a key with Resque.set_dynamic_queue(key, ["q1", "q2"]
         #
         def queues_with_dynamic
-          queue_names = @queues
+          queue_names = @queues.dup
 
           return queues_without_dynamic if queue_names.grep(/(^!)|(^@)|(\*)/).size == 0
 
