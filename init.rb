@@ -1,0 +1,1 @@
+require 'resque_dynamic_queues'

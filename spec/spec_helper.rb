@@ -1,4 +1,4 @@
-require 'resque-dynamic-queues'
+require 'resque_dynamic_queues'
 
 spec_dir = File.dirname(File.expand_path(__FILE__))
 REDIS_CMD = "redis-server #{spec_dir}/redis-test.conf"

@@ -1,0 +1,66 @@
+<h1>Dynamic Queues</h1>
+<table class='workers'>
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Result</th>
+    <th>Workers</th>
+    <th></th>
+  </tr>
+  <% @queues.each do |queue| %>
+    <tr>
+      <td><%= queue %></td>
+      <td><%= Resque.get_dynamic_queue(queue).join(", ") %></td>
+      <td><%= Resque::Worker.new("@#{queue}").queues.join(", ") %></td>
+      <td></td>
+      <td>
+        <a href="<%= url(:dynamicqueues) %>/<%= queue %>/remove" class="remove">Remove</a>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>Fallback</td>
+    <td>-</td>
+    <td><%= Resque::Worker.new("@---").queues.join(', ') %></td>
+    <td></td>
+    <td>
+    </td>
+  </tr>
+</table>
+
+
+<h1>Make a new queue</h1>
+<form action="<%= url(:dynamicqueues) %>" method="post" accept-charset="utf-8">
+  <p><input type="text" name="name"></p>
+  <p>
+    <textarea name="queues"></textarea>
+    Separate new queues by lines
+  </p>
+  <p><input type="submit" value="Create or Update"></p>
+</form>
+
+
+<script type="text/javascript" charset="utf-8">
+  jQuery(function($) {
+
+    $('a.remove').click(function(e) {
+      e.preventDefault();
+      var $link = $(this),
+          url = $link.attr('href'),
+          confirmed = confirm("Are you sure you want to kill this job? There is no undo.");
+      if (confirmed) {
+        $link.animate({opacity: 0.5});
+        $.ajax({
+          url: url,
+          type: 'post',
+          success: function() {
+            $link.parents('tr').remove();
+          }
+        });
+      } else {
+        return false
+      }
+    });
+
+  });
+</script>
