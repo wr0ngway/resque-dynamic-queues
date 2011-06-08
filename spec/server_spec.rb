@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'rack'
 require 'rack/test'
 require 'resque/server'
-require 'resque_dynamic_queues_server'
+require 'resque-dynamic-queues-server'
 
 Sinatra::Base.set :environment, :test
 # ::Test::Unit::TestCase.send :include, Rack::Test::Methods
