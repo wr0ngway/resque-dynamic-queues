@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency("resque", '~> 1.10')
   s.add_development_dependency('rspec', '~> 2.5')
+  s.add_development_dependency('rack-test', '~> 0.5.4')
 
 end
 
