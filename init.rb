@@ -1,1 +1,1 @@
-require 'resque_dynamic_queues'
+require 'resque-dynamic-queues'

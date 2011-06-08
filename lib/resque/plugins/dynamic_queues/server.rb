@@ -1,4 +1,4 @@
-require 'resque_dynamic_queues'
+require 'resque-dynamic-queues'
 
 module Resque
   module Plugins
