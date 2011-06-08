@@ -44,3 +44,12 @@ QUEUE='@key' rake resque:work
 
   Pulls jobs from queue names stored in redis, with wildcards/negations
 
+
+
+There is also a tab in the resque-web UI that allows you to define the dynamic queues  To activate it, you need to require 'resque-dynamic-queues-server' in whatever initializer you use to bring up resque-web.
+
+
+Contributors:
+
+Matt Conway ( https://github.com/wr0ngway )
+Bert Goethals ( https://github.com/Bertg )
