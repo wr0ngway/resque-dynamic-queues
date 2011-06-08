@@ -1,0 +1,11 @@
+0.6.0
+-----
+
+Stored dynamic keys fall back to a default, or to all the queues.
+Some refactoring and auto loading
+Resque web interface
+
+0.5.1
+-----
+
+Initial version
