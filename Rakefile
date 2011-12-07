@@ -41,7 +41,7 @@ task :changelog do
   end
 
   # Generate changelog from repo
-  log=`git log --pretty='format:%s <%h> [%cn]' #{newest_tag}..#{HEAD}`
+  log=`git log --pretty='format:%s <%h> [%cn]' #{newest_tag}..HEAD`
 
   # Strip out maintenance entries
   log = log.lines.to_a.delete_if do |l|
