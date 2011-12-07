@@ -18,14 +18,6 @@
       </td>
     </tr>
   <% end %>
-  <tr>
-    <td>Fallback</td>
-    <td>-</td>
-    <td><%= Resque::Worker.new("@---").queues.join(', ') %></td>
-    <td></td>
-    <td>
-    </td>
-  </tr>
 </table>
 
 
@@ -47,7 +39,7 @@
       e.preventDefault();
       var $link = $(this),
           url = $link.attr('href'),
-          confirmed = confirm("Are you sure you want to kill this job? There is no undo.");
+          confirmed = confirm("Are you sure you want to remove this dynamic queue? There is no undo.");
       if (confirmed) {
         $link.animate({opacity: 0.5});
         $.ajax({
