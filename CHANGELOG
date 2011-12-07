@@ -1,3 +1,9 @@
+0.6.1
+-----
+
+fix typo <c80635a> [Matt Conway]
+make settnig of fallback more explicit in web ui <e85f6a0> [Matt Conway]
+
 0.6.0
 -----
 
