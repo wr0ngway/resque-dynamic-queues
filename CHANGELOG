@@ -1,3 +1,9 @@
+0.7.0
+-----
+
+api breaking refactor, web ui improvements <51948a0> [Matt Conway]
+add rackup config for testing web ui <009ccda> [Matt Conway]
+
 0.6.1
 -----
 
