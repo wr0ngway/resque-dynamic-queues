@@ -37,6 +37,12 @@ describe "Dynamic Queues pages" do
 
   context "show dynamic queues table" do
 
+    it "should shows default queue when nothing set" do
+      get "/dynamicqueues"
+
+      last_response.body.should include 'default'
+    end
+
     it "should shows names of queues" do
       Resque.set_dynamic_queue("key_one", ["foo"])
       Resque.set_dynamic_queue("key_two", ["bar"])
@@ -61,23 +67,18 @@ describe "Dynamic Queues pages" do
 
   context "remove queue link" do
 
-
-    it "should shows remove link for queue" do
+    it "should show remove link for queue" do
       Resque.set_dynamic_queue("key_one", ["foo"])
 
       get "/dynamicqueues"
 
-      last_response.body.should match /<a .*href=['"]http:\/\/example.org\/dynamicqueues\/key_one\/remove['"].*>/
+      last_response.body.should match /<a .*href=['"]#remove['"].*>/
     end
 
-    it "should remove queue when remove link clicked" do # JS will do the post
-      Resque.set_dynamic_queue("key_one", ["foo"])
+    it "should show add link" do
+      get "/dynamicqueues"
 
-      post "/dynamicqueues/key_one/remove"
-
-      last_response.should be_redirect
-      last_response['Location'].should match /dynamicqueues/
-      Resque.get_dynamic_queue("key_two").should be_empty
+      last_response.body.should match /<a .*href=['"]#add['"].*>/
     end
 
   end
@@ -87,22 +88,31 @@ describe "Dynamic Queues pages" do
     it "should have form to edit queues" do
       get "/dynamicqueues"
 
-      last_response.body.should match /<form .*action=['"]http:\/\/example.org\/dynamicqueues['"].*>/
-      last_response.body.should match /<input .*name=['"]name['"].*>/
-      last_response.body.should match /<textarea .*name=['"]queues['"].*>/
+      last_response.body.should match /<form action="http:\/\/example.org\/dynamicqueues"/
+    end
+    
+    it "should show input fields" do
+      Resque.set_dynamic_queue("key_one", ["foo"])
+      Resque.set_dynamic_queue("key_two", ["bar", "baz"])
+      get "/dynamicqueues"
+
+      last_response.body.should match /<input type="text" id="input-0-name" name="queues\[\]\[name\]" value="key_one"/
+      last_response.body.should match /<input type="text" id="input-0-value" name="queues\[\]\[value\]" value="foo"/
+      last_response.body.should match /<input type="text" id="input-1-name" name="queues\[\]\[name\]" value="key_two"/
+      last_response.body.should match /<input type="text" id="input-1-value" name="queues\[\]\[value\]" value="bar, baz"/
     end
 
     it "should delete queues on empty queue submit" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
-      post "/dynamicqueues", {'name' => "key_two", "queues" => ""}
+      post "/dynamicqueues", {'queues' => [{'name' => "key_two", "value" => ""}]}
 
       last_response.should be_redirect
       last_response['Location'].should match /dynamicqueues/
-      Resque.get_dynamic_queue("key_two").should be_empty
+      Resque.get_dynamic_queue("key_two", []).should be_empty
     end
 
     it "should create queues" do
-      post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
+      post "/dynamicqueues", {'queues' => [{'name' => "key_two", "value" => " foo, bar ,baz "}]}
 
       last_response.should be_redirect
       last_response['Location'].should match /dynamicqueues/
@@ -111,7 +121,7 @@ describe "Dynamic Queues pages" do
 
     it "should update queues" do
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
-      post "/dynamicqueues", {'name' => "key_two", "queues" => "foo\n\rbar\n\rbaz"}
+      post "/dynamicqueues", {'queues' => [{'name' => "key_two", "value" => "foo,bar,baz"}]}
 
       last_response.should be_redirect
       last_response['Location'].should match /dynamicqueues/

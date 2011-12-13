@@ -9,25 +9,46 @@ module Resque
 
         def self.registered(app)
           app.get "/dynamicqueues" do
-            @queues = Resque.get_dynamic_queues
-            dq_view :queues
+            @queues = []
+            dqueues = Resque.get_dynamic_queues
+            dqueues.each do |k, v|
+              view_data = {
+                  'name' => k,
+                  'value' => Array(v).join(", "),
+                  'expanded' => Resque::Worker.new("@#{k}").queues.join(", ")
+              }
+              @queues << view_data
+            end
+            
+            @queues.sort! do |a, b|
+              an = a['name']
+              bn = b['name']
+              if an == 'default'
+                1
+              elsif bn == 'default'
+                -1
+              else
+                an <=> bn
+              end
+            end
+            
+            plugin_view :queues
           end
 
           app.post "/dynamicqueues" do
-            key    = params['name']
-            values = params['queues'].to_s.split.collect{|q| q.gsub(/\s/, '')}
-            Resque.set_dynamic_queue(key, values)
-            redirect url(:dynamicqueues)
-          end
-
-          app.post "/dynamicqueues/:key/remove" do
-            key    = params['key']
-            Resque.set_dynamic_queue(key, [])
+            dynamic_queues = Array(params['queues'])
+            queues = {}
+            dynamic_queues.each do |queue|
+              key = queue['name']
+              values = queue['value'].to_s.split(',').collect{|q| q.gsub(/\s/, '') }
+              queues[key] = values
+            end
+            Resque.set_dynamic_queues(queues)
             redirect url(:dynamicqueues)
           end
 
           app.helpers do
-            def dq_view(filename, options = {}, locals = {})
+            def plugin_view(filename, options = {}, locals = {})
               erb(File.read(File.join(::Resque::Plugins::DynamicQueues::Server::VIEW_PATH, "#{filename}.erb")), options, locals)
             end
           end
@@ -38,5 +59,3 @@ module Resque
     end
   end
 end
-
-Resque::Server.register Resque::Plugins::DynamicQueues::Server

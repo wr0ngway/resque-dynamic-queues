@@ -1,58 +1,61 @@
 <h1>Dynamic Queues</h1>
-<table class='workers'>
-  <tr>
-    <th>Name</th>
-    <th>Value</th>
-    <th>Result</th>
-    <th>Workers</th>
-    <th></th>
-  </tr>
-  <% @queues.each do |queue| %>
+<p class="intro">
+  The list below shows the dynamic queues currently defined.  When you start a worker with a dynamic queue key (@key_name), that key is looked up from the list below to determine the actual queues the worker should pull from.  Wildcards (*) and negation (leading !) can be used to select the queues the worker should process. There is always a fallback key - @default, which workers will use if the key for that worker is empty.  If both the key and the fallback are empty, the worker defaults to processing '*'
+</p>
+
+<form action="<%= url(:dynamicqueues) %>" method="POST" style="float:none; margin-top:10px">
+
+  <table class='queues'>
     <tr>
-      <td><%= queue %></td>
-      <td><%= Resque.get_dynamic_queue(queue).join(", ") %></td>
-      <td><%= Resque::Worker.new("@#{queue}").queues.join(", ") %></td>
-      <td></td>
-      <td>
-        <a href="<%= url(:dynamicqueues) %>/<%= queue %>/remove" class="remove">Remove</a>
-      </td>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Expanded</th>
+      <th></th>
     </tr>
-  <% end %>
-</table>
+    <% @queues.each_with_index do |data, i| %>
+      <tr class="line">
+        <td><input type="text" id="input-<%= i %>-name" name="queues[][name]" value="<%= data['name'] %>" /></td>
+        <td><input type="text" id="input-<%= i %>-value" name="queues[][value]" value="<%= data['value'] %>" /></td>
+        <td class="expanded"><%= data['expanded'] %></td>
+        <td>
+          <a href="#remove" class="remove">Remove</a>
+        </td>
+      </tr>
+    <% end %>
+  </table>
 
+  <a href="#add" class="add">Add</a>
+  <input type="submit" value="Save"/>
 
-<h1>Make a new queue</h1>
-<form action="<%= url(:dynamicqueues) %>" method="post" accept-charset="utf-8">
-  <p><input type="text" name="name"></p>
-  <p>
-    <textarea name="queues"></textarea>
-    Separate new queues by lines
-  </p>
-  <p><input type="submit" value="Create or Update"></p>
 </form>
 
-
 <script type="text/javascript" charset="utf-8">
+  function markDirty()
+  {
+    $("input[type=submit]").css({border:"3px orange solid"});
+  }
+  
   jQuery(function($) {
 
-    $('a.remove').click(function(e) {
+    $("input").live("keypress", markDirty);
+    
+    $("a.add").live("click", function(e) {
       e.preventDefault();
-      var $link = $(this),
-          url = $link.attr('href'),
-          confirmed = confirm("Are you sure you want to remove this dynamic queue? There is no undo.");
-      if (confirmed) {
-        $link.animate({opacity: 0.5});
-        $.ajax({
-          url: url,
-          type: 'post',
-          success: function() {
-            $link.parents('tr').remove();
-          }
-        });
-      } else {
-        return false
-      }
+      var $table = $("table.queues");
+      var $newRow = $table.find("tr.line:first").clone();
+      $newRow.find("input[type=text]").attr("value", "");
+      $newRow.find("td.expanded").html("")
+      $newRow.appendTo($table);
+      markDirty();
     });
 
+    $("a.remove").live("click", function(e) {
+      e.preventDefault();
+      var $link = $(this);
+      $link.parents("tr").remove();
+      markDirty();
+    });
+
+ 
   });
 </script>
