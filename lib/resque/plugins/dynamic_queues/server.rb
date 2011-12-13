@@ -32,7 +32,7 @@ module Resque
               end
             end
             
-            plugin_view :queues
+            dynamicqueues_view :queues
           end
 
           app.post "/dynamicqueues" do
@@ -48,7 +48,7 @@ module Resque
           end
 
           app.helpers do
-            def plugin_view(filename, options = {}, locals = {})
+            def dynamicqueues_view(filename, options = {}, locals = {})
               erb(File.read(File.join(::Resque::Plugins::DynamicQueues::Server::VIEW_PATH, "#{filename}.erb")), options, locals)
             end
           end
