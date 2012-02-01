@@ -24,7 +24,7 @@ module Resque
           real_queues = Resque.queues
           matched_queues = []
 
-          queue_names.each do |q|
+          while q = queue_names.shift
             q = q.to_s
 
             if q =~ /^@(.*)/
