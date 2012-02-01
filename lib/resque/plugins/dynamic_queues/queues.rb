@@ -34,7 +34,7 @@ module Resque
               next
             end
 
-            if q[0] == '!'
+            if q =~ /^!/
               negated = true
               q = q[1..-1]
             end
