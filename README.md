@@ -4,6 +4,10 @@ Authored against Resque 1.15, so it at least works with that - try running the t
 
 Usage:
 
+If creating a gem of your own that uses resque-dynamic-queues, you may have to add an explicit require statement at the top of your Rakefile:
+
+require 'resque-dynamic-queues'
+
 Start your workers with a QUEUE that can contain '\*' for zero-or more of any character, '!' to exclude the following pattern, or @key to look up the patterns from redis.  Some examples help:
 
 QUEUE='foo' rake resque:work
@@ -44,6 +48,13 @@ QUEUE='@key' rake resque:work
 
   Pulls jobs from queue names stored in redis, with wildcards/negations
 
+task :custom_worker do
+    ENV['QUEUE'] = "\*foo\*,!\*bar"
+
+    Rake::Task['resque:work'].invoke
+end
+
+  From a custom rake script
 
 
 There is also a tab in the resque-web UI that allows you to define the dynamic queues  To activate it, you need to require 'resque-dynamic-queues-server' in whatever initializer you use to bring up resque-web.
