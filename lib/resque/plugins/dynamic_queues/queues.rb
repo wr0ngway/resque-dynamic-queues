@@ -32,7 +32,7 @@ module Resque
               key = hostname if key.size == 0
 
               add_queues = Resque.get_dynamic_queue(key)
-              add_queues.map! { |q| '!' + q } if $1
+              add_queues.map! { |q| q.gsub!(/^!/, '') || q.gsub!(/^/, '!') } if $1
 
               queue_names.concat(add_queues)
               next
