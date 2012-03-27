@@ -129,6 +129,12 @@ describe "Dynamic Queues" do
       worker.queues.should == ["high_x", "high_y", "superhigh_z"]
     end
 
+    it "can blacklist dynamic queues" do
+      Resque.set_dynamic_queue("mykey", ["foo"])
+      worker = Resque::Worker.new("*", "!@mykey")
+      worker.queues.should == ["high_x", "high_y", "superhigh_z"]
+    end
+
     it "can blacklist queues with pattern" do
       worker = Resque::Worker.new("*", "!*high*")
       worker.queues.should == ["foo"]

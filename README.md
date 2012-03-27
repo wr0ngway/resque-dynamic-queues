@@ -38,6 +38,10 @@ Pulls jobs from queues whose names contain foo except queues whose names end in 
 
 Pulls jobs from queue names stored in redis (use Resque.set\_dynamic\_queue("key", ["queuename1", "queuename2"]) to set them)
 
+    QUEUE='*,!@key' rake resque:work
+
+Pulls jobs from any queue execept ones stored in redis
+
     QUEUE='@' rake resque:work
 
 Pulls jobs from queue names stored in redis using the hostname of the worker

@@ -27,10 +27,14 @@ module Resque
           while q = queue_names.shift
             q = q.to_s
 
-            if q =~ /^@(.*)/
-              key = $1.strip
+            if q =~ /^(!)?@(.*)/
+              key = $2.strip
               key = hostname if key.size == 0
-              queue_names.concat(Resque.get_dynamic_queue(key))
+
+              add_queues = Resque.get_dynamic_queue(key)
+              add_queues.map! { |q| '!' + q } if $1
+
+              queue_names.concat(add_queues)
               next
             end
 
