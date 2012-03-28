@@ -129,12 +129,6 @@ describe "Dynamic Queues" do
       worker.queues.should == ["high_x", "high_y", "superhigh_z"]
     end
 
-    it "can blacklist dynamic queues" do
-      Resque.set_dynamic_queue("mykey", ["foo"])
-      worker = Resque::Worker.new("*", "!@mykey")
-      worker.queues.should == ["high_x", "high_y", "superhigh_z"]
-    end
-
     it "can blacklist queues with pattern" do
       worker = Resque::Worker.new("*", "!*high*")
       worker.queues.should == ["foo"]
@@ -148,6 +142,28 @@ describe "Dynamic Queues" do
       Resque.set_dynamic_queue("mykey", ["foo", "bar"])
       worker = Resque::Worker.new("@mykey")
       worker.queues.should == ["bar", "foo"]
+    end
+
+    it "can blacklist dynamic queues" do
+      Resque.watch_queue("high_x")
+      Resque.watch_queue("foo")
+      Resque.watch_queue("high_y")
+      Resque.watch_queue("superhigh_z")
+
+      Resque.set_dynamic_queue("mykey", ["foo"])
+      worker = Resque::Worker.new("*", "!@mykey")
+      worker.queues.should == ["high_x", "high_y", "superhigh_z"]
+    end
+
+    it "can blacklist dynamic queues with negation" do
+      Resque.watch_queue("high_x")
+      Resque.watch_queue("foo")
+      Resque.watch_queue("high_y")
+      Resque.watch_queue("superhigh_z")
+
+      Resque.set_dynamic_queue("mykey", ["!foo", "high_x"])
+      worker = Resque::Worker.new("!@mykey")
+      worker.queues.should == ["foo"]
     end
 
     it "will not bloat the workers queue" do
