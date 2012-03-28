@@ -15,7 +15,7 @@ module Resque
               view_data = {
                   'name' => k,
                   'value' => Array(v).join(", "),
-                  'expanded' => Resque::Worker.new("@#{k}").queues.join(", ")
+                  'expanded' => Resque::Worker.new("@#{k}").queues.sort.join(", ")
               }
               @queues << view_data
             end
