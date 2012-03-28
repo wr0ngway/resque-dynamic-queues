@@ -19,7 +19,7 @@ module Resque
         def queues_with_dynamic
           queue_names = @queues.dup
 
-          return queues_without_dynamic if queue_names.grep(/(^!)|(^@)|(\*)/).size == 0
+          return queues_without_dynamic.shuffle if queue_names.grep(/(^!)|(^@)|(\*)/).size == 0
 
           real_queues = Resque.queues
           matched_queues = []
@@ -54,7 +54,7 @@ module Resque
             end
           end
 
-          return matched_queues.uniq.sort
+          return matched_queues.uniq.shuffle
         end
 
 
