@@ -1,3 +1,24 @@
+0.8.0
+-----
+
+Merge pull request #5 from kcrayon/master <016ae7c> [Matt Conway]
+Add test for dynamic queue with negation <5f50574> [Chris Zutler]
+Moving shuffling into branch. <a4360eb> [Chris Zutler]
+Sort view of queues in web. <af53da5> [Chris Zutler]
+Merge pull request #1 from snmaynard/patch-2 <92b437c> [kcrayon]
+Shuffle the matching queues <f11585f> [Simon Maynard]
+Slightly smarther dynamic queue negation. <184fa03> [Chris Zutler]
+Add ability to blacklist dynamic queues. <d66b81b> [Chris Zutler]
+Fix code blocks <75b782f> [Matt Conway]
+Merge pull request #4 from billywatson/add_extra_tips_to_readme <25e6337> [Matt Conway]
+add require note and document custom rake task ex. <78b6d6c> [William Watson]
+only auto start/stop redis if not on CI <21ec8e0> [Matt Conway]
+fix for rbx <94407b4> [Matt Conway]
+fix for ruby 1.8 <2a50fbf> [Matt Conway]
+enable travis ci <e8c0c16> [Matt Conway]
+license date <bda1ae5> [Matt Conway]
+license <498c222> [Matt Conway]
+
 0.7.1
 -----
 
