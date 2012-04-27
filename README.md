@@ -2,6 +2,8 @@ A resque plugin for specifying the queues a worker pulls from with wildcards, ne
 
 Authored against Resque 1.15, so it at least works with that - try running the tests if you use a different version of resque
 
+[![Build Status](https://secure.travis-ci.org/wr0ngway/resque-dynamic-queues.png)](http://travis-ci.org/wr0ngway/resque-dynamic-queues)
+
 Usage:
 
 If creating a gem of your own that uses resque-dynamic-queues, you may have to add an explicit require statement at the top of your Rakefile:
