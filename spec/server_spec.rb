@@ -88,7 +88,7 @@ describe "Dynamic Queues pages" do
     it "should have form to edit queues" do
       get "/dynamicqueues"
 
-      last_response.body.should match /<form action="http:\/\/example.org\/dynamicqueues"/
+      last_response.body.should match /<form action="\/dynamicqueues"/
     end
     
     it "should show input fields" do

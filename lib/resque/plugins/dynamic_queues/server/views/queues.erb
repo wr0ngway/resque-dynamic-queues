@@ -3,7 +3,7 @@
   The list below shows the dynamic queues currently defined.  When you start a worker with a dynamic queue key (@key_name), that key is looked up from the list below to determine the actual queues the worker should pull from.  Wildcards (*) and negation (leading !) can be used to select the queues the worker should process. There is always a fallback key - @default, which workers will use if the key for that worker is empty.  If both the key and the fallback are empty, the worker defaults to processing '*'
 </p>
 
-<form action="<%= url(:dynamicqueues) %>" method="POST" style="float:none; margin-top:10px">
+<form action="/dynamicqueues" method="POST" style="float:none; margin-top:10px">
 
   <table class='queues'>
     <tr>

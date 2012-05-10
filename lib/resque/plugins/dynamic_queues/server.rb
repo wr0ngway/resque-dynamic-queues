@@ -44,7 +44,7 @@ module Resque
               queues[key] = values
             end
             Resque.set_dynamic_queues(queues)
-            redirect url(:dynamicqueues)
+            redirect "/dynamicqueues"
           end
 
           app.helpers do
