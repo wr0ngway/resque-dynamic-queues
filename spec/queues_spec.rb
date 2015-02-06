@@ -124,6 +124,11 @@ describe "Dynamic Queues" do
       worker.queues.should == ["high_x", "high_y", "superhigh_z"]
     end
 
+    it "can order queues with traditional wildcard use" do
+      worker = Resque::Worker.new("high_x", "high_y", "*", "superhigh_z")
+      worker.queues.should == ["high_x", "high_y", "foo", "superhigh_z"]
+    end
+
     it "can blacklist queues" do
       worker = Resque::Worker.new("*", "!foo")
       worker.queues.should == ["high_x", "high_y", "superhigh_z"]
