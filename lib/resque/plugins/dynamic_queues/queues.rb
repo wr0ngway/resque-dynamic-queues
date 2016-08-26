@@ -54,7 +54,7 @@ module Resque
             end
           end
 
-          return matched_queues.uniq.sort
+          return matched_queues.uniq
         end
 
 
