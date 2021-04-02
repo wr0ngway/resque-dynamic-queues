@@ -2,7 +2,6 @@
 $:.push File.expand_path("../lib", __FILE__)
 require 'resque/plugins/dynamic_queues/version'
 
-
 Gem::Specification.new do |s|
   s.name        = "resque-dynamic-queues"
   s.version     = Resque::Plugins::DynamicQueues::VERSION
@@ -17,11 +16,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency("resque", '~> 2.0', '< 3')
+  s.add_dependency("resque", "~> 2.0", "< 3")
 
-  s.add_development_dependency('rake', '~> 13.0')
-  s.add_development_dependency('rspec', '~> 2.5')
-  s.add_development_dependency('rack-test', '~> 0.5.4')
-
+  s.add_development_dependency("rake", "~> 13.0")
+  s.add_development_dependency("rspec", "~> 3.10")
+  s.add_development_dependency("rack-test", "~> 1.0")
 end
 
