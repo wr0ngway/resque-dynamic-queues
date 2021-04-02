@@ -1,6 +1,10 @@
 require 'rspec'
 require 'resque-dynamic-queues'
 
+RSpec.configure do |config|
+  config.expect_with(:rspec) { |c| c.syntax = :should }
+end
+
 # No need to start redis when running in Travis
 unless ENV['CI']
 
@@ -9,10 +13,10 @@ unless ENV['CI']
   rescue Errno::ECONNREFUSED
     spec_dir = File.dirname(File.expand_path(__FILE__))
     REDIS_CMD = "redis-server #{spec_dir}/redis-test.conf"
-    
+
     puts "Starting redis for testing at localhost..."
     puts `cd #{spec_dir}; #{REDIS_CMD}`
-    
+
     # Schedule the redis server for shutdown when tests are all finished.
     at_exit do
       puts 'Stopping redis'
@@ -23,7 +27,7 @@ unless ENV['CI']
       File.delete("#{spec_dir}/dump.rdb") rescue nil
     end
   end
-  
+
 end
 
 class SomeJob
