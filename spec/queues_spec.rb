@@ -3,7 +3,7 @@ require "spec_helper"
 describe "Dynamic Queues" do
 
   before(:each) do
-    Resque.redis.flushall
+    Resque.redis.redis.flushall
   end
 
   context "basic resque behavior still works" do
@@ -59,38 +59,38 @@ describe "Dynamic Queues" do
     it "should always have a fallback pattern" do
       Resque.get_dynamic_queues.should == {'default' => ['*']}
     end
-    
+
     it "should allow setting single patterns" do
       Resque.get_dynamic_queue('foo').should == ['*']
       Resque.set_dynamic_queue('foo', ['bar'])
       Resque.get_dynamic_queue('foo').should == ['bar']
     end
-    
+
     it "should allow setting multiple patterns" do
       Resque.set_dynamic_queues({'foo' => ['bar'], 'baz' => ['boo']})
       Resque.get_dynamic_queues.should == {'foo' => ['bar'], 'baz' => ['boo'], 'default' => ['*']}
     end
-    
+
     it "should remove mapping when setting empty value" do
       Resque.get_dynamic_queues
       Resque.set_dynamic_queues({'foo' => ['bar'], 'baz' => ['boo']})
       Resque.get_dynamic_queues.should == {'foo' => ['bar'], 'baz' => ['boo'], 'default' => ['*']}
-      
+
       Resque.set_dynamic_queues({'foo' => [], 'baz' => ['boo']})
       Resque.get_dynamic_queues.should == {'baz' => ['boo'], 'default' => ['*']}
       Resque.set_dynamic_queues({'baz' => nil})
       Resque.get_dynamic_queues.should == {'default' => ['*']}
-      
+
       Resque.set_dynamic_queues({'foo' => ['bar'], 'baz' => ['boo']})
       Resque.set_dynamic_queue('foo', [])
       Resque.get_dynamic_queues.should == {'baz' => ['boo'], 'default' => ['*']}
       Resque.set_dynamic_queue('baz', nil)
       Resque.get_dynamic_queues.should == {'default' => ['*']}
     end
-    
-    
+
+
   end
-  
+
   context "basic queue patterns" do
 
     before(:each) do

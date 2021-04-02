@@ -18,7 +18,7 @@ describe "Dynamic Queues pages" do
   end
 
   before(:each) do
-    Resque.redis.flushall
+    Resque.redis.redis.flushall
   end
 
   context "existnce in application" do
@@ -90,7 +90,7 @@ describe "Dynamic Queues pages" do
 
       last_response.body.should match /<form action="\/dynamicqueues"/
     end
-    
+
     it "should show input fields" do
       Resque.set_dynamic_queue("key_one", ["foo"])
       Resque.set_dynamic_queue("key_two", ["bar", "baz"])
